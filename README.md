@@ -2,10 +2,12 @@
 
 After Effectsでレベルメータを作る時は、Trapcode Sound keyを使うと楽なのですが、持ってないので、代わりにでっち上げたアプリです。  
   
+![SOundBars](https://user-images.githubusercontent.com/50650451/83331969-b4013a80-a2d3-11ea-97cc-027732441271.png)  
+
 オーディオスペクトラムで適当なレベルメータを描画してその画像から音のデータをjsonに変換します。
 
 出力したjsonはスクリプト(soundBars.jsx)でキーフレームに変換します。  
-
+![SOundBars2](https://user-images.githubusercontent.com/50650451/83331982-bc597580-a2d3-11ea-8ce9-5e6a0885d36c.png)  
 
 # 使い方
 　AepSampleフォルダの中にあるSaundBars_CS6.aepを見てください。  
