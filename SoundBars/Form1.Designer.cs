@@ -44,8 +44,8 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.numLevelMax = new System.Windows.Forms.NumericUpDown();
-			this.makeSoundBar1 = new SoundBars.MakeSoundBar();
 			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.makeSoundBar1 = new SoundBars.MakeSoundBar();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numLevelCount)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numLevelMax)).BeginInit();
@@ -77,17 +77,19 @@
 			this.setdirToolStripMenuItem.Name = "setdirToolStripMenuItem";
 			this.setdirToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.setdirToolStripMenuItem.Text = "SetDirectory";
+			this.setdirToolStripMenuItem.Click += new System.EventHandler(this.setdirToolStripMenuItem_Click);
 			// 
 			// exportToolStripMenuItem
 			// 
 			this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
 			this.exportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.exportToolStripMenuItem.Text = "Export";
+			this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
 			this.quitToolStripMenuItem.Text = "Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
 			// 
@@ -102,7 +104,7 @@
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
 			this.aboutToolStripMenuItem.Text = "バージョン情報の表示";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
@@ -139,6 +141,7 @@
 			this.btnExport.TabIndex = 4;
 			this.btnExport.Text = "Export";
 			this.btnExport.UseVisualStyleBackColor = true;
+			this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
 			// 
 			// progressBar1
 			// 
@@ -204,14 +207,6 @@
             0,
             0});
 			// 
-			// makeSoundBar1
-			// 
-			this.makeSoundBar1.LevelCount = 18;
-			this.makeSoundBar1.LevelMax = 255;
-			this.makeSoundBar1.NumLavelCount = this.numLevelCount;
-			this.makeSoundBar1.NumLavelMax = this.numLevelMax;
-			this.makeSoundBar1.ProgressBar = this.progressBar1;
-			// 
 			// textBox1
 			// 
 			this.textBox1.Location = new System.Drawing.Point(13, 38);
@@ -220,6 +215,14 @@
 			this.textBox1.Size = new System.Drawing.Size(603, 19);
 			this.textBox1.TabIndex = 10;
 			this.textBox1.Text = "使い方はめんどくさいのでReadme.mdを読んでください。\r\npng連番に描かれたサウンドレベル表示をjsonデータに変換します。";
+			// 
+			// makeSoundBar1
+			// 
+			this.makeSoundBar1.LevelCount = 18;
+			this.makeSoundBar1.LevelMax = 255;
+			this.makeSoundBar1.NumLavelCount = this.numLevelCount;
+			this.makeSoundBar1.NumLavelMax = this.numLevelMax;
+			this.makeSoundBar1.ProgressBar = this.progressBar1;
 			// 
 			// Form1
 			// 

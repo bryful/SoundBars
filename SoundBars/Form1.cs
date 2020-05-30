@@ -153,28 +153,19 @@ namespace SoundBars
 
 		}
 
+		private void btnExport_Click(object sender, EventArgs e)
+		{
+			makeSoundBar1.ExportFileDlg();
+		}
 
-		/*
-private void button1_Click(object sender, EventArgs e)
-{
-	dynamic a = new DynamicJson();
-	a.fff = new string[] { "a", "B" };
-	a.fff = "12";
-	//a.fff = new { aaa=12, ccc="www" };
+		private void setdirToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			makeSoundBar1.SelectFileDlg();
+		}
 
-	MessageBox.Show(a.fff.GetType().ToString());
-
-	JsonPref s = new JsonPref();
-	s.AddInt("aaa", 99);
-	string ss = s.ToJson();
-	MessageBox.Show(ss);
-	s.Parse(ss);
-	string sss = s.ToJson();
-	MessageBox.Show(sss);
-
-	int i = s.GetInt("aaa");
-	MessageBox.Show(String.Format("{0}", i));
-}
-*/
+		private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			makeSoundBar1.ExportFileDlg();
+		}
 	}
 }

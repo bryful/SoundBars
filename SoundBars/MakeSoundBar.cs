@@ -193,12 +193,15 @@ namespace SoundBars
 			if ( cnt<= 0) return ret;
 			//配列の初期化
 			double[][] v = new double[m_LevelCount][];
+			double[][] v2 = new double[m_LevelCount][];
 			for(int i=0; i<m_LevelCount; i++)
 			{
 				v[i] = new double[cnt];
+				v2[i] = new double[cnt];
 				for (int j=0;j<cnt;j++)
 				{
 					v[i][j] = 0;
+					v2[i][j] = 0;
 				}
 			}
 
@@ -231,7 +234,19 @@ namespace SoundBars
 				m_ProgressBar.Maximum = cnt;
 				m_ProgressBar.Value = 0;
 			}
-			m_SoundData = v;
+			//平坦化する
+			for (int i=0; i<m_LevelCount;i++)
+			{
+				v2[i][0] = v[i][0];
+				v2[i][cnt-1] = v[i][cnt-1];
+				for (int j=1; j<cnt-1;j++)
+				{
+					v2[i][j] = (v[i][j - 1] + v[i][j + 1]) / 2;
+				}
+
+			}
+
+			m_SoundData = v2;
 			ret = true;
 			return ret;
 		}

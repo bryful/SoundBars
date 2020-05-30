@@ -11,7 +11,10 @@
 *.userprefs
 
 10_stage.wav
+"Adobe After Effects Ž©“®•Û‘¶soundBars_pic"/
+
 soundBars_pic/
+soundBars_pic2/
 
 # Build results
 [Dd]ebug/
@@ -262,3 +265,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/aepSampel/soundBars_pic
