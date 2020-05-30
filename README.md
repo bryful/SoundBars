@@ -16,6 +16,10 @@ After Effectsでレベルメータを作る時は、Trapcode Sound keyを使う�
 スクリプトで変換したら、エクスプレッションで使います。  
 
 
+サンプルで入れてある楽曲は音楽：魔王魂さんのHPから落としたものです。
+
+https://maoudamashii.jokersounds.com/list/song2.html  
+
 
 # License
 
