@@ -1,16 +1,19 @@
-﻿# SoundBars
+﻿?# SoundBars
 
 After Effectsでレベルメータを作る時は、Trapcode Sound keyを使うと楽なのですが、持ってないので、代わりにでっち上げたアプリです。  
   
 オーディオスペクトラムで適当なレベルメータを描画してその画像から音のデータをjsonに変換します。
 
-出力したjsonはスクリプトでキーフレームに変換します。  
+出力したjsonはスクリプト(soundBars.jsx)でキーフレームに変換します。  
 
 
 # 使い方
 　AepSampleフォルダの中にあるSaundBars_CS6.aepを見てください。  
 横方向が強さ、縦の1ピクセル毎がレベルのチャンネルです。  
   
+![soundBars_0091](https://user-images.githubusercontent.com/50650451/83330899-3e926b80-a2cd-11ea-80aa-366c18807527.png)  
+
+上の絵のようなものをオーディオスペクトラムで作成します。  
 チャンネルを増やすにはいろいろパラメータを変更してください。
   
 書き出し画像は8bitx3のpngでお願いします。  
@@ -19,6 +22,12 @@ After Effectsでレベルメータを作る時は、Trapcode Sound keyを使う�
   
 exportでjsonに書き出しです。  
   
+json2.jsxinc  
+bryScriptLib.jsxinc  
+soundBars.jsx  
+の三つをScriptUI Panelsフォルダにコピーしてください。  
+
+3000F位の変換は結構時間がかかります。
 スクリプトで変換したら、エクスプレッションで使います。  
 
 
