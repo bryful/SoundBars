@@ -14,8 +14,47 @@ using Codeplex.Data;
 
 namespace SoundBars
 {
-	public class MakeSoundBar :Component
+	public class MakeSoundBar :Control
 	{
+		private double [][] m_SoundData  =  new double[0][];
+		private double [][] m_SoundDataBak  =  new double[0][];
+		private int m_FrameCount = 0;
+		private int m_Position = 0;
+		private int m_BarWidth = 0;
+		private int m_BarHeight = 0;
+		private int[] m_LeftTable = new int[0];
+		private int m_Top = 10;
+		private System.Windows.Forms.Timer m_Timer = new System.Windows.Forms.Timer();
+		private bool anime = false;
+		// ****************************************************************************
+		private void SizeChk()
+		{
+			int w = this.Width / (m_LevelCount*2 + 2);
+			int h = this.Height - m_Top*2;
+			m_BarWidth = w;
+			m_BarHeight = h;
+			m_LeftTable = new int[m_LevelCount];
+			for (int i = 0; i < m_LevelCount; i++) m_LeftTable[i] = 2 * w * (i + 1);
+			if (m_SoundData.Length > 0)
+			{
+				m_FrameCount = m_SoundData[0].Length;
+			}
+			else
+			{
+				m_FrameCount = 0;
+			}
+			if(m_Position>=m_FrameCount)
+			{
+				m_Position = 0;
+			}
+		}
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			SizeChk();
+		}
+		// ****************************************************************************
+		#region Property
 		private string m_TargetDir = "";
 		public string TargetDir {  get { return m_TargetDir; } }
 
@@ -23,7 +62,6 @@ namespace SoundBars
 		public string ExportFileName { get { return m_exportFileName; } }
 
 
-		private double [][] m_SoundData  =  new double[0][];
 
 		private int m_LevelCount = 18;
 		public int LevelCount
@@ -118,10 +156,129 @@ namespace SoundBars
 				m_ProgressBar = value;
 			}
 		}
+
+		private TrackBar m_TrackBar = null;
+		public TrackBar TrackBar
+		{
+			get { return m_TrackBar; }
+			set
+			{
+				m_TrackBar = value;
+				if(m_TrackBar != null)
+				{
+					m_TrackBar.Minimum = 0;
+					m_TrackBar.Maximum = m_FrameCount;
+					if (m_TrackBar.Value != m_Position)m_TrackBar.Value = m_Position;
+
+					m_TrackBar.ValueChanged += M_TrackBar_ValueChanged;
+
+				}
+
+			}
+		}
+
+		private void M_TrackBar_ValueChanged(object sender, EventArgs e)
+		{
+			if( m_Position != m_TrackBar.Value)
+			{
+				m_Position = m_TrackBar.Value;
+				this.Invalidate();
+			}
+		}
+		private Button m_PlayBtn = null;
+		public Button PlayBtn
+		{
+			get { return m_PlayBtn; }
+			set
+			{
+				m_PlayBtn = value;
+				if(m_PlayBtn != null)
+				{
+					m_PlayBtn.Click += M_PlayBtn_Click;
+					m_PlayBtn.Text = "Start";
+				}
+			}
+		}
+
+		private void M_PlayBtn_Click(object sender, EventArgs e)
+		{
+			StartStop();
+		}
+		#endregion
+		// ****************************************************************************
 		public MakeSoundBar()
 		{
+			this.SetStyle(ControlStyles.DoubleBuffer, true);
+			this.SetStyle(ControlStyles.UserPaint, true);
+			this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
+			this.Size = new Size(200, 100);
+
+			m_Timer.Interval = 1000 / 24;
+			m_Timer.Tick += M_Timer_Tick;
 
 		}
+		public void Start()
+		{
+			if (m_FrameCount > 0)
+			{
+				anime = true;
+				m_Timer.Start();
+				if (m_PlayBtn != null)
+				{
+					m_PlayBtn.Text = "Stop";
+				}
+			}
+			else
+			{
+				anime = false;
+				m_Timer.Stop();
+				if (m_PlayBtn != null)
+				{
+					m_PlayBtn.Text = "Start";
+				}
+
+			}
+		}
+		public void Stop()
+		{
+			anime = false;
+			m_Timer.Stop();
+			if (m_PlayBtn != null)
+			{
+				m_PlayBtn.Text = "Start";
+			}
+		}
+		public void StartStop()
+		{
+			if (anime)
+			{
+				Stop();
+			}
+			else
+			{
+				Start();
+			}
+		}
+		private void M_Timer_Tick(object sender, EventArgs e)
+		{
+			if (m_FrameCount <= 0)
+			{
+				Stop();
+			}
+			if (anime)
+			{
+				this.Invalidate();
+				this.Update();
+				m_Position = (m_Position + 1) % m_FrameCount;
+				if (m_TrackBar != null)
+				{
+					m_TrackBar.Value = m_Position;
+				}
+			}
+		}
+
+		// ****************************************************************************
 		private double[] dataFromPictureFile(string p)
 		{
 			double[] ret = new double[m_LevelCount];
@@ -188,20 +345,19 @@ namespace SoundBars
 		{
 			bool ret = false;
 			m_SoundData = new double[0][];
+			m_SoundDataBak = new double[0][];
+			m_FrameCount = 0;
 
 			int cnt = files.Length;
 			if ( cnt<= 0) return ret;
 			//配列の初期化
 			double[][] v = new double[m_LevelCount][];
-			double[][] v2 = new double[m_LevelCount][];
 			for(int i=0; i<m_LevelCount; i++)
 			{
 				v[i] = new double[cnt];
-				v2[i] = new double[cnt];
 				for (int j=0;j<cnt;j++)
 				{
 					v[i][j] = 0;
-					v2[i][j] = 0;
 				}
 			}
 
@@ -210,6 +366,7 @@ namespace SoundBars
 				m_ProgressBar.Minimum = 0;
 				m_ProgressBar.Maximum = cnt;
 				m_ProgressBar.Value = 0;
+				m_ProgressBar.Visible = true;
 			}
 			for (int i=0; i<cnt;i++)
 			{
@@ -233,29 +390,50 @@ namespace SoundBars
 				m_ProgressBar.Minimum = 0;
 				m_ProgressBar.Maximum = cnt;
 				m_ProgressBar.Value = 0;
+				m_ProgressBar.Visible = false;
 			}
-			//平坦化する
-			for (int i=0; i<m_LevelCount;i++)
+
+			m_SoundData = v;
+			SizeChk();
+			ToCopy(m_SoundData, ref m_SoundDataBak);
+
+			if (m_TrackBar!=null)
 			{
-				v2[i][0] = v[i][0];
-				v2[i][cnt-1] = v[i][cnt-1];
-				for (int j=1; j<cnt-1;j++)
-				{
-					v2[i][j] = (v[i][j - 1] + v[i][j + 1]) / 2;
-				}
-
+				m_TrackBar.Maximum = m_FrameCount;
 			}
-
-			m_SoundData = v2;
+			Start();
 			ret = true;
 			return ret;
 		}
-
+		private void ToCopy(double[][] src, ref double[][] dst)
+		{
+			int c = src.Length;
+			dst = new double[c][];
+			if(c>0)
+			{
+				int l = src[0].Length;
+				if (l > 0)
+				{
+					for (int i = 0; i < c; i++)
+					{
+						dst[i] = new double[l];
+						for (int j = 0; j < l; j++)
+						{
+							dst[i][j] = src[i][j];
+						}
+					}
+				}
+			}
+		}
 
 		public bool SetDir(string p)
 		{
 			bool ret = false;
 			m_TargetDir = "";
+			if (anime)
+			{
+				Stop();
+			}
 			string[] files = GetFiles(p);
 			if (files.Length <= 0) return ret;
 
@@ -359,7 +537,102 @@ namespace SoundBars
 			}
 			return ret;
 		}
+		// ****************************************************************************
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			Graphics g = e.Graphics;
+			SolidBrush sb = new SolidBrush(Color.Black);
+			try
+			{
+				g.FillRectangle(sb, this.ClientRectangle);
+				sb.Color = Color.White;
+				g.DrawString(String.Format("{0}", m_Position), this.Font, sb, 5, 5);
+				if (m_FrameCount > 0)
+				{
+					if (m_LevelCount > 0)
+					{
+						for (int i=0; i<m_LevelCount;i++)
+						{
+							int h = (int)((double)m_BarHeight * m_SoundData[i][m_Position]);
+							int t = this.Height - m_Top - h;
+							Rectangle r = new Rectangle(m_LeftTable[i], t, m_BarWidth, h);
+							g.FillRectangle(sb, r);
+						}
 
+					}
+				}
+			}
+			finally
+			{
+				sb.Dispose();
+			}
+		}
+		// ****************************************************************************
+		public void Flat2()
+		{
+			if ((m_FrameCount <= 0) || (m_LevelCount <= 0)) return;
 
+			int cnt = m_FrameCount / 2;
+			bool b = anime;
+			if (anime) Stop();
+
+			double[][] Bak = new double[0][];
+			ToCopy(m_SoundData, ref Bak);
+
+			for (int lc = 0; lc < m_LevelCount; lc++)
+			{
+				for (int i = 0; i < cnt; i++)
+				{
+					int v0 = i * 2;
+					int v1 = v0 + 1;
+					int v2 = v0 + 2;
+					if (v2 >= m_FrameCount) break;
+
+					m_SoundData[lc][v1] = (Bak[lc][v0] + Bak[lc][v2]) / 2;
+				}
+			}
+
+			if (b) Start();
+		}// ****************************************************************************
+		public void Flat3()
+		{
+			if ((m_FrameCount <= 0) || (m_LevelCount <= 0)) return;
+
+			int cnt = m_FrameCount / 3;
+			bool b = anime;
+			if (anime) Stop();
+
+			double[][] Bak = new double[0][];
+			ToCopy(m_SoundData, ref Bak);
+
+			for (int lc = 0; lc < m_LevelCount; lc++)
+			{
+				for (int i = 0; i < cnt; i++)
+				{
+					int v0 = i * 3;
+					int v1 = v0 + 1;
+					int v2 = v0 + 2;
+					int v3 = v0 + 3;
+					if (v1 >= m_FrameCount) break;
+					if (v2 >= m_FrameCount) break;
+					if (v3 >= m_FrameCount) break;
+
+					m_SoundData[lc][v1] = (Bak[lc][v0]*2/3 + Bak[lc][v3]*1/3) ;
+					m_SoundData[lc][v2] = (Bak[lc][v0]*1/3 + Bak[lc][v3]*2/3) ;
+				}
+			}
+
+			if (b) Start();
+		}
+		public void Org()
+		{
+			if ((m_FrameCount <= 0) || (m_LevelCount <= 0)) return;
+			bool b = anime;
+			if (anime) Stop();
+
+			ToCopy(m_SoundDataBak, ref m_SoundData);
+
+			if (b) Start();
+		}
 	}
 }

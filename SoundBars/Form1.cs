@@ -114,8 +114,6 @@ namespace SoundBars
 					if( makeSoundBar1.SetDir(s)==true)
 					{
 						tbTargetDir.Text = makeSoundBar1.TargetDir;
-						string js = makeSoundBar1.ToJson();
-						File.WriteAllText("sound.json", js);
 
 						break;
 					}
@@ -137,21 +135,6 @@ namespace SoundBars
 		{
 			AppInfoDialog.ShowAppInfoDialog();
 		}
-		private void button1_Click(object sender, EventArgs e)
-		{
-
-			JsonPref j = new JsonPref();
-
-			int[] aaa = new int[] { 78, 9, 12 };
-			double[] bbb = new double[] { 0.7, 0.01, 0.12 };
-			string[] ccc = new string[] { "eee", "sfskjbF", "13" };
-			j.SetIntArray("aa", aaa);
-			j.SetDoubleArray("bb", bbb);
-			j.SetStringArray("cc", ccc);
-
-			MessageBox.Show(j.ToJson());
-
-		}
 
 		private void btnExport_Click(object sender, EventArgs e)
 		{
@@ -166,6 +149,22 @@ namespace SoundBars
 		private void exportToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			makeSoundBar1.ExportFileDlg();
+		}
+
+		private void btnFlat_Click(object sender, EventArgs e)
+		{
+			makeSoundBar1.Flat2();
+		}
+
+		private void btnOrg_Click(object sender, EventArgs e)
+		{
+			makeSoundBar1.Org();
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			makeSoundBar1.Flat3();
+
 		}
 	}
 }
